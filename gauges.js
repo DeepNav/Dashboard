@@ -10,7 +10,7 @@ gauge_instances = {};
                 minValue: -1,
                 startAngle: 45,
                 ticksAngle: 270,
-                valueBox: true,
+                valueBox: false,
                 maxValue: 1,
                 majorTicks: [
                     "-100",
@@ -60,7 +60,7 @@ gauge_instances = {};
                 minValue: 0,
                 startAngle: 90,
                 ticksAngle: 180,
-                valueBox: true,
+                valueBox: false,
                 maxValue: 180,
                 majorTicks: [
                     "0",

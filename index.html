@@ -28,6 +28,7 @@
                             <h5 class="card-header">Throttle</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="throttle"></canvas>
+                                <div id="throttle_val">0</div>
                             </div>
                         </div>
                     </div>
@@ -36,6 +37,7 @@
                             <h5 class="card-header">Rudder Direction</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="direction"></canvas>
+                                <div id="direction_val">0</div>
                             </div>
                         </div>
                     </div>
@@ -147,15 +149,14 @@
                 }
                 latest_ts = data.ts
                 for(key in data){
+                    value = Math.round( parseFloat(data[key]) * 100 )/100
                     if(gauge_instances[key]){
-                        gauge_instances[key].value = data[key]
-                    }else{
-                        try{
-                            value = Math.round( parseFloat(data[key]) * 100 )/100
-                            $("#"+key).html(value)
-                        }catch(e){
-                            console.error("No such element #"+key)
-                        }
+                        gauge_instances[key].value = value
+                    }
+                    try{
+                        $("#"+key+"_val").html(value)
+                    }catch(e){
+                        console.error("No such element #"+key)
                     }
                 }
             };
