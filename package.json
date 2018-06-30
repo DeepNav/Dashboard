@@ -1,0 +1,25 @@
+{
+  "name": "deepnav_dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/putcn/DeepNav_Dashboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/putcn/DeepNav_Dashboard/issues"
+  },
+  "homepage": "https://github.com/putcn/DeepNav_Dashboard#readme",
+  "devDependencies": {
+    "bootstrap": "^4.1.1",
+    "canvas-gauges": "^2.1.5",
+    "jquery": "^1.9.1",
+    "popper.js": "^1.14.3"
+  }
+}

@@ -1,0 +1,173 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>DeepNav Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <style>
+        .card {
+            margin-bottom: 30px
+        }
+    </style>
+
+</head>
+
+<body>
+    <main role="main">
+        <div class="album py-5 bg-light">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Throttle</h5>
+                            <div class="card-body text-center">
+                                <canvas class="gauge" id="throttle"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Rudder Direction</h5>
+                            <div class="card-body text-center">
+                                <canvas class="gauge" id="direction"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Heading</h5>
+                            <div class="card-body text-center">
+                                <canvas class="gauge" id="heading"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">GPS</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Lat: 123.2</li>
+                                <li class="list-group-item">Lng: 90.2322</li>
+                                <li class="list-group-item">Alt: 19</li>
+                                <li class="list-group-item">Speed: 0.2m/s</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Compass</h5>
+                            <div class="card-body text-center">
+                                <canvas class="gauge" id="compass"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Water speed</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Forward: 1m/s</li>
+                                <li class="list-group-item">Backward: 0m/s</li>
+                                <li class="list-group-item">Left: 0.2m/s</li>
+                                <li class="list-group-item">Right: 0.2m/s</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Wind direction</h5>
+                            <div class="card-body text-center">
+                                <canvas class="gauge" id="wind_direction"></canvas>
+                                <div>2m/s</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Spatial</h5>
+                            <div class="card-body text-center">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">X</th>
+                                            <th scope="col">Y</th>
+                                            <th scope="col">Z</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">acc</th>
+                                            <td>0.1m/s<sup>2</sup></td>
+                                            <td>0.2m/s<sup>2</sup></td>
+                                            <td>0.2m/s<sup>2</sup></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">ang</th>
+                                            <td>2&#176;/s</td>
+                                            <td>1&#176;/s</td>
+                                            <td>5&#176;/s</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">mag</th>
+                                            <td>-0.03G</td>
+                                            <td>0.002G</td>
+                                            <td>0.007G</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="node_modules/jquery/jquery.min.js"></script>
+    <!-- script src="node_modules/popper.js/dist/popper.js"></script -->
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/canvas-gauges/gauge.min.js"></script>
+    <script src="gauges.js"></script>
+    <script>
+        var latest_ts;
+        function open_conn(){
+            var ws = new WebSocket("ws://localhost:8000");
+            ws.onopen = function(){
+                console.log("ws connected")
+            }
+            ws.onmessage = function (evt) { 
+                data = JSON.parse(evt.data);
+                if(data.ts < latest_ts){
+                    return
+                }
+                latest_ts = data.ts
+                for(key in data){
+                    if(gauge_instances[key]){
+                        gauge_instances[key].value = data[key]
+                    }else{
+                        try{
+                            value = Math.round( parseFloat(data[key]) * 100 )/100
+                            $("#"+key).html(value)
+                        }catch(e){
+                            console.error("No such element #"+key)
+                        }
+                    }
+                }
+            };
+
+            ws.onclose = function() {
+                console.log("ws disconnected, retrying")
+                setTimeout(open_conn, 1000)
+            };
+        }
+        
+        open_conn()
+    </script>
+</body>
+
+</html>
