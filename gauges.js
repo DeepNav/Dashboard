@@ -1,95 +1,57 @@
 gauge_instances = {};
-(function(gauge_instances){
+(function (gauge_instances) {
     var gauges_configs = [
         {
             id: "throttle",
+            type: Gauge,
             meta: {
-                width: 200,
-                height: 200,
-                units: "%",
+                angle: 0, // The span of the gauge arc
+                lineWidth: 0.41, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.56, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6FADCF',   // Colors
+                colorStop: '#8FC0DA',    // just experiment with them
+                strokeColor: '#E0E0E0',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,    // High resolution support,
                 minValue: -1,
-                startAngle: 45,
-                ticksAngle: 270,
-                valueBox: false,
                 maxValue: 1,
-                majorTicks: [
-                    "-100",
-                    "-80",
-                    "-60",
-                    "-40",
-                    "-20",
-                    "0",
-                    "20",
-                    "40",
-                    "60",
-                    "80",
-                    "100"
-                ],
-                minorTicks: 2,
-                strokeTicks: true,
-                highlights: [
-                    {
-                        "from": 0.8,
-                        "to": 1.0,
-                        "color": "rgba(200, 50, 50, .75)"
-                    },
-                    {
-                        "from": -1.0,
-                        "to": -0.8,
-                        "color": "rgba(200, 50, 50, .75)"
-                    }
-                ],
-                colorPlate: "#fff",
-                borderShadowWidth: 0,
-                borders: false,
-                needleType: "arrow",
-                needleWidth: 2,
-                needleCircleSize: 7,
-                needleCircleOuter: true,
-                needleCircleInner: false,
-                animationDuration: 100,
-                animationRule: "linear"
+                animationSpeed: 32
             }
         },
         {
             id: "direction",
+            type: Gauge,
             meta: {
-                width: 200,
-                height: 200,
-                units: "degree",
+                angle: 0, 
+                lineWidth: 0.41,
+                radiusScale: 1, 
+                pointer: {
+                    length: 0.56, 
+                    strokeWidth: 0.035,
+                    color: '#000000'
+                },
+                limitMax: false,
+                limitMin: false, 
+                colorStart: '#E0E0E0',
+                colorStop: '#E0E0E0',
+                strokeColor: '#E0E0E0',
+                generateGradient: true,
+                highDpiSupport: true,
                 minValue: 0,
-                startAngle: 90,
-                ticksAngle: 180,
-                valueBox: false,
                 maxValue: 180,
-                majorTicks: [
-                    "0",
-                    "20",
-                    "40",
-                    "60",
-                    "80",
-                    "100",
-                    "120",
-                    "140",
-                    "160",
-                    "180"
-                ],
-                minorTicks: 2,
-                strokeTicks: true,
-                colorPlate: "#fff",
-                borderShadowWidth: 0,
-                borders: false,
-                needleType: "arrow",
-                needleWidth: 2,
-                needleCircleSize: 7,
-                needleCircleOuter: true,
-                needleCircleInner: false,
-                animationDuration: 100,
-                animationRule: "linear"
+                animationSpeed: 32
             }
         },
         {
             id: "compass",
+            type: RadialGauge,
             meta: {
                 width: 200,
                 height: 200,
@@ -143,6 +105,7 @@ gauge_instances = {};
         },
         {
             id: "wind_direction",
+            type: RadialGauge,
             meta: {
                 width: 200,
                 height: 200,
@@ -196,6 +159,7 @@ gauge_instances = {};
         },
         {
             id: "heading",
+            type: RadialGauge,
             meta: {
                 width: 200,
                 height: 200,
@@ -249,10 +213,24 @@ gauge_instances = {};
         }
     ]
 
-    gauges_configs.forEach(function(gauge_config){
-        gauge_config.meta.renderTo = gauge_config.id;
-        gauge = new RadialGauge(gauge_config.meta);
-        gauge.draw();
-        gauge_instances[gauge_config.id] = gauge;
+    gauges_configs.forEach(function (gauge_config) {
+        if( gauge_config.type == RadialGauge){
+            gauge_config.meta.renderTo = gauge_config.id;
+            var gauge = new RadialGauge(gauge_config.meta);
+            gauge.draw();
+            gauge_instances[gauge_config.id] = gauge;
+            gauge.dv_update = function(val){
+                gauge.value = val
+            }
+        }else{
+            var target = document.getElementById(gauge_config.id);
+            var gauge = new Gauge(target).setOptions(gauge_config.meta);
+            gauge.maxValue = gauge_config.meta.maxValue;
+            gauge.setMinValue(gauge_config.meta.minValue)
+            gauge_instances[gauge_config.id] = gauge;
+            gauge.dv_update = function(val){
+                gauge.set(val)
+            }
+        }
     })
 })(gauge_instances)

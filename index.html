@@ -219,6 +219,7 @@
     <!-- script src="node_modules/popper.js/dist/popper.js"></script -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/canvas-gauges/gauge.min.js"></script>
+    <script src="third_party/gaugejs/gauge.min.js"></script>
     <script src="gauges.js"></script>
     <script>
         var latest_ts;
@@ -242,12 +243,12 @@
                 for (key in data) {
                     value = data[key]
                     if (gauge_instances[key]) {
-                        gauge_instances[key].value = value
+                        gauge_instances[key].dv_update(value) 
                     }
                     try {
                         $("#" + key + "_val").html(value)
                     } catch (e) {
-                        console.error("No such element #" + key)
+                        // console.error("No such element #" + key)
                     }
                 }
             };
