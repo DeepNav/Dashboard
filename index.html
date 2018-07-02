@@ -14,6 +14,56 @@
         .card {
             margin-bottom: 30px
         }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+
+            position: relative;
+            margin: 100px auto;
+        }
+
+        .double-bounce1,
+        .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #333;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        @-webkit-keyframes sk-bounce {
+            0%,
+            100% {
+                -webkit-transform: scale(0.0)
+            }
+            50% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @keyframes sk-bounce {
+            0%,
+            100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0);
+            }
+            50% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
     </style>
 
 </head>
@@ -28,7 +78,9 @@
                             <h5 class="card-header">Throttle</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="throttle"></canvas>
-                                <div id="throttle_val">0</div>
+                                <div>
+                                    <span id="throttle_val"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -37,7 +89,8 @@
                             <h5 class="card-header">Rudder Direction</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="direction"></canvas>
-                                <div id="direction_val">0</div>
+                                <div>
+                                    <span id="direction_val">90</span>°</div>
                             </div>
                         </div>
                     </div>
@@ -46,6 +99,8 @@
                             <h5 class="card-header">Heading</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="heading"></canvas>
+                                <div>
+                                    <span id="heading_val"></span>°</div>
                             </div>
                         </div>
                     </div>
@@ -53,10 +108,14 @@
                         <div class="card">
                             <h5 class="card-header">GPS</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Lat: 123.2</li>
-                                <li class="list-group-item">Lng: 90.2322</li>
-                                <li class="list-group-item">Alt: 19</li>
-                                <li class="list-group-item">Speed: 0.2m/s</li>
+                                <li class="list-group-item">Lat:
+                                    <span id="lat_val">N/A</span>°</li>
+                                <li class="list-group-item">Lng:
+                                    <span id="lng_val">N/A</span>°</li>
+                                <li class="list-group-item">Alt:
+                                    <span id="alt_val">N/A</span>m</li>
+                                <li class="list-group-item">Speed:
+                                    <span id="ground_speed_val">N/A</span>km/h</li>
                             </ul>
                         </div>
                     </div>
@@ -81,7 +140,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="card">
-                            <h5 class="card-header">Wind direction</h5>
+                            <h5 class="card-header">Wind</h5>
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="wind_direction"></canvas>
                                 <div>2m/s</div>
@@ -104,9 +163,15 @@
                                     <tbody>
                                         <tr>
                                             <th scope="row">acc</th>
-                                            <td>0.1m/s<sup>2</sup></td>
-                                            <td>0.2m/s<sup>2</sup></td>
-                                            <td>0.2m/s<sup>2</sup></td>
+                                            <td>0.1m/s
+                                                <sup>2</sup>
+                                            </td>
+                                            <td>0.2m/s
+                                                <sup>2</sup>
+                                            </td>
+                                            <td>0.2m/s
+                                                <sup>2</sup>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ang</th>
@@ -130,6 +195,26 @@
         </div>
     </main>
 
+    <!-- Modal -->
+    <div class="modal fade" id="loading_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Connecting to Server</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="node_modules/jquery/jquery.min.js"></script>
     <!-- script src="node_modules/popper.js/dist/popper.js"></script -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -137,36 +222,42 @@
     <script src="gauges.js"></script>
     <script>
         var latest_ts;
-        function open_conn(){
+        function open_conn() {
+            $('#loading_modal').modal({
+                backdrop: "static"
+            })
             var ws = new WebSocket("ws://localhost:8000");
-            ws.onopen = function(){
+            ws.onopen = function () {
+                setTimeout(function () {
+                    $('#loading_modal').modal('hide')
+                }, 500)
                 console.log("ws connected")
             }
-            ws.onmessage = function (evt) { 
+            ws.onmessage = function (evt) {
                 data = JSON.parse(evt.data);
-                if(data.ts < latest_ts){
+                if (data.ts < latest_ts) {
                     return
                 }
                 latest_ts = data.ts
-                for(key in data){
-                    value = Math.round( parseFloat(data[key]) * 100 )/100
-                    if(gauge_instances[key]){
+                for (key in data) {
+                    value = data[key]
+                    if (gauge_instances[key]) {
                         gauge_instances[key].value = value
                     }
-                    try{
-                        $("#"+key+"_val").html(value)
-                    }catch(e){
-                        console.error("No such element #"+key)
+                    try {
+                        $("#" + key + "_val").html(value)
+                    } catch (e) {
+                        console.error("No such element #" + key)
                     }
                 }
             };
 
-            ws.onclose = function() {
+            ws.onclose = function () {
                 console.log("ws disconnected, retrying")
                 setTimeout(open_conn, 1000)
             };
         }
-        
+
         open_conn()
     </script>
 </body>
