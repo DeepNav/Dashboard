@@ -29,16 +29,16 @@ gauge_instances = {};
             id: "direction",
             type: Gauge,
             meta: {
-                angle: 0, 
+                angle: 0,
                 lineWidth: 0.41,
-                radiusScale: 1, 
+                radiusScale: 1,
                 pointer: {
-                    length: 0.56, 
+                    length: 0.56,
                     strokeWidth: 0.035,
                     color: '#000000'
                 },
                 limitMax: false,
-                limitMin: false, 
+                limitMin: false,
                 colorStart: '#E0E0E0',
                 colorStop: '#E0E0E0',
                 strokeColor: '#E0E0E0',
@@ -214,21 +214,21 @@ gauge_instances = {};
     ]
 
     gauges_configs.forEach(function (gauge_config) {
-        if( gauge_config.type == RadialGauge){
+        if (gauge_config.type == RadialGauge) {
             gauge_config.meta.renderTo = gauge_config.id;
             var gauge = new RadialGauge(gauge_config.meta);
             gauge.draw();
             gauge_instances[gauge_config.id] = gauge;
-            gauge.dv_update = function(val){
+            gauge.dv_update = function (val) {
                 gauge.value = val
             }
-        }else{
+        } else {
             var target = document.getElementById(gauge_config.id);
             var gauge = new Gauge(target).setOptions(gauge_config.meta);
             gauge.maxValue = gauge_config.meta.maxValue;
             gauge.setMinValue(gauge_config.meta.minValue)
             gauge_instances[gauge_config.id] = gauge;
-            gauge.dv_update = function(val){
+            gauge.dv_update = function (val) {
                 gauge.set(val)
             }
         }
