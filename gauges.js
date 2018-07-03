@@ -102,7 +102,7 @@ gauge_instances = {};
             }
         },
         {
-            id: "compass",
+            id: "compass_bearing",
             type: RadialGauge,
             meta: compass_meta
         },

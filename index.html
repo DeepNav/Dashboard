@@ -132,8 +132,69 @@
                         <div class="card">
                             <h5 class="card-header">Compass</h5>
                             <div class="card-body text-center">
-                                <canvas class="gauge" id="compass"></canvas>
+                                <canvas class="gauge" id="compass_bearing"></canvas>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h5 class="card-header">Spatial</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Yaw
+                                    <span class="badge badge-primary badge-pill">
+                                        <span id="compass_bearing_val">N/A</span>&#176;</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Pitch
+                                    <span class="badge badge-primary badge-pill">
+                                        <span id="pitch_angle_val">N/A</span>&#176;</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Roll
+                                    <span class="badge badge-primary badge-pill">
+                                        <span id="roll_angle_val">N/A</span>&#176;</span>
+                                </li>
+                            </ul>
+                            <!-- div class="card-body">
+                                    <h6>Raw Data:</h6>
+                                    <table class="table table-sm text-center">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">X</th>
+                                                <th scope="col">Y</th>
+                                                <th scope="col">Z</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">acc</th>
+                                                <td><span id="acc_x_val">N/A</span>m/s
+                                                    <sup>2</sup>
+                                                </td>
+                                                <td><span id="acc_y_val">N/A</span>m/s
+                                                    <sup>2</sup>
+                                                </td>
+                                                <td><span id="acc_z_val">N/A</span>m/s
+                                                    <sup>2</sup>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ang</th>
+                                                <td><span id="ang_x_val">N/A</span>&#176;/s</td>
+                                                <td><span id="ang_y_val">N/A</span>&#176;/s</td>
+                                                <td><span id="ang_z_val">N/A</span>&#176;/s</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">mag</th>
+                                                <td><span id="mag_x_val">N/A</span>G</td>
+                                                <td><span id="mag_y_val">N/A</span>G</td>
+                                                <td><span id="mag_z_val">N/A</span>G</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div -->
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -153,49 +214,6 @@
                             <div class="card-body text-center">
                                 <canvas class="gauge" id="wind_direction"></canvas>
                                 <div>2m/s</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <h5 class="card-header">Spatial</h5>
-                            <div class="card-body text-center">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col">X</th>
-                                            <th scope="col">Y</th>
-                                            <th scope="col">Z</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">acc</th>
-                                            <td>0.1m/s
-                                                <sup>2</sup>
-                                            </td>
-                                            <td>0.2m/s
-                                                <sup>2</sup>
-                                            </td>
-                                            <td>0.2m/s
-                                                <sup>2</sup>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">ang</th>
-                                            <td>2&#176;/s</td>
-                                            <td>1&#176;/s</td>
-                                            <td>5&#176;/s</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">mag</th>
-                                            <td>-0.03G</td>
-                                            <td>0.002G</td>
-                                            <td>0.007G</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
