@@ -107,9 +107,9 @@
                         <div class="card">
                             <h5 class="card-header">Heading</h5>
                             <div class="card-body text-center">
-                                <canvas class="gauge" id="heading"></canvas>
+                                <div class="gauge" id="heading"></div>
                                 <div>
-                                    <span id="heading_val"></span>°</div>
+                                    <span id="heading_val">N/A</span>°</div>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                         <div class="card">
                             <h5 class="card-header">Compass</h5>
                             <div class="card-body text-center">
-                                <canvas class="gauge" id="compass_bearing"></canvas>
+                                <div class="gauge" id="compass_bearing"></div>
                             </div>
                         </div>
                     </div>
@@ -212,8 +212,8 @@
                         <div class="card">
                             <h5 class="card-header">Wind</h5>
                             <div class="card-body text-center">
-                                <canvas class="gauge" id="wind_direction"></canvas>
-                                <div>2m/s</div>
+                                <div class="gauge" id="wind_direction"></div>
+                                <div><span id="wind_speed_val">N/A</span>mph</div>
                             </div>
                         </div>
                     </div>
@@ -245,7 +245,6 @@
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- script src="node_modules/popper.js/dist/popper.js"></script -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="node_modules/canvas-gauges/gauge.min.js"></script>
     <script src="third_party/gaugejs/gauge.min.js"></script>
     <script src="gauges.js"></script>
     <script>
@@ -273,7 +272,7 @@
                         value = value ? "ON" : "OFF"
                     }
                     if (gauge_instances[key]) {
-                        gauge_instances[key].dv_update(value)
+                        gauge_instances[key].set(value)
                     }
                     try {
                         $("#" + key + "_val").html(value)

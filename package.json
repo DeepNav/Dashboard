@@ -18,7 +18,6 @@
   "homepage": "https://github.com/putcn/DeepNav_Dashboard#readme",
   "devDependencies": {
     "bootstrap": "^4.1.1",
-    "canvas-gauges": "^2.1.5",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   }
