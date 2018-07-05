@@ -1,7 +1,7 @@
 gauge_instances = {};
 (function (gauge_instances) {
-    class Compass{
-        constructor(config){
+    class Compass {
+        constructor(config) {
             this.imagePath = config.imagePath || "images/compass.png";
             this.renderTo = config.renderTo
             this.imageWidth = config.imageWidth || 250
@@ -13,66 +13,54 @@ gauge_instances = {};
                 transition: "all 0.5s"
             })
         }
-        set value(val){
-            this.image.css('transform','rotate(' + val + 'deg)');
+        set value(val) {
+            this.image.css('transform', 'rotate(' + val + 'deg)');
         }
-        draw(){
+        draw() {
             $("#" + this.renderTo).append(this.image)
         }
-        set(val){
+        set(val) {
             this.value = val
         }
     }
-    var compass_meta = {}
+    let compass_meta = {}
+    let gauge_config = {
+        angle: 0,
+        lineWidth: 0.41,
+        radiusScale: 1,
+        pointer: {
+            length: 0.56,
+            strokeWidth: 0.035,
+            color: '#000000'
+        },
+        limitMax: false,
+        limitMin: false,
+        colorStart: '#6FADCF',
+        colorStop: '#8FC0DA',
+        strokeColor: '#E0E0E0',
+        generateGradient: true,
+        highDpiSupport: true,
+        minValue: -1,
+        maxValue: 1,
+        animationSpeed: 32
+    }
 
     var gauges_configs = [
         {
             id: "throttle",
             type: Gauge,
-            meta: {
-                angle: 0,
-                lineWidth: 0.41,
-                radiusScale: 1,
-                pointer: {
-                    length: 0.56,
-                    strokeWidth: 0.035,
-                    color: '#000000'
-                },
-                limitMax: false,
-                limitMin: false,
-                colorStart: '#6FADCF',
-                colorStop: '#8FC0DA',
-                strokeColor: '#E0E0E0',
-                generateGradient: true,
-                highDpiSupport: true,
+            meta: Object.assign({
                 minValue: -1,
-                maxValue: 1,
-                animationSpeed: 32
-            }
+                maxValue: 1
+            }, gauge_config)
         },
         {
             id: "direction",
             type: Gauge,
-            meta: {
-                angle: 0,
-                lineWidth: 0.41,
-                radiusScale: 1,
-                pointer: {
-                    length: 0.56,
-                    strokeWidth: 0.035,
-                    color: '#000000'
-                },
-                limitMax: false,
-                limitMin: false,
-                colorStart: '#E0E0E0',
-                colorStop: '#E0E0E0',
-                strokeColor: '#E0E0E0',
-                generateGradient: true,
-                highDpiSupport: true,
+            meta: Object.assign({
                 minValue: 0,
-                maxValue: 180,
-                animationSpeed: 32
-            }
+                maxValue: 180
+            }, gauge_config)
         },
         {
             id: "compass_bearing",
