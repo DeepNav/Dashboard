@@ -23,8 +23,8 @@ gauge_instances = {};
             this.value = val
         }
     }
-    let compass_meta = {}
-    let gauge_config = {
+    var compass_meta = {}
+    var gauge_config = {
         angle: 0,
         lineWidth: 0.41,
         radiusScale: 1,
@@ -49,18 +49,20 @@ gauge_instances = {};
         {
             id: "throttle",
             type: Gauge,
-            meta: Object.assign({
+            meta: Object.assign({}, gauge_config, {
                 minValue: -1,
                 maxValue: 1
-            }, gauge_config)
+            })
         },
         {
             id: "direction",
             type: Gauge,
-            meta: Object.assign({
+            meta: Object.assign({}, gauge_config, {
                 minValue: 0,
-                maxValue: 180
-            }, gauge_config)
+                maxValue: 180,
+                colorStart: '#E0E0E0',
+                colorStop: '#E0E0E0'
+            })
         },
         {
             id: "compass_bearing",
