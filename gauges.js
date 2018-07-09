@@ -52,7 +52,8 @@ gauge_instances = {};
             meta: Object.assign({}, gauge_config, {
                 minValue: -1,
                 maxValue: 1
-            })
+            }),
+            default_val: 0
         },
         {
             id: "direction",
@@ -62,22 +63,26 @@ gauge_instances = {};
                 maxValue: 180,
                 colorStart: '#E0E0E0',
                 colorStop: '#E0E0E0'
-            })
+            }),
+            default_val: 90
         },
         {
             id: "compass_bearing",
             type: Compass,
-            meta: compass_meta
+            meta: compass_meta,
+            default_val: 0
         },
         {
             id: "wind_direction",
             type: Compass,
-            meta: compass_meta
+            meta: compass_meta,
+            default_val: 0
         },
         {
             id: "heading",
             type: Compass,
-            meta: compass_meta
+            meta: compass_meta,
+            default_val: 0
         }
     ]
 
@@ -94,5 +99,6 @@ gauge_instances = {};
             gauge.setMinValue(gauge_config.meta.minValue)
             gauge_instances[gauge_config.id] = gauge;
         }
+        gauge.set(gauge_config.default_val)
     })
 })(gauge_instances)
